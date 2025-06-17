@@ -1,0 +1,77 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Main {
+    //static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int balance = 100;
+        String[] row;
+        int bet;
+
+        System.out.println("******************************");
+        System.out.println("Welcome to Java Slots Machine!");
+        System.out.println("      🍉  🍒  🍋  🔔  ⭐️     ");
+        System.out.println("******************************");
+
+        while (balance>0) {
+            System.out.println("Your current balance is " + balance + "€");
+            System.out.print("Enter your bet: ");
+            bet = scanner.nextInt();
+
+            if(bet > balance){
+                System.out.println("INSUFFICIENT MONEY");
+                continue;
+            }
+            else if (bet < 0){
+                System.out.println("You can't enter negative value");
+                continue;
+            }
+            balance -= bet;
+
+            row = spinRow();
+            printRow(row);
+            balance = getPaid(row, bet) + balance ;
+
+        }
+    }
+    static String[] spinRow() {
+        String[] symbols = {"🍉", "🍒", "🍋", "🔔", "⭐"};
+        String[] rowSymbols = new String[3];
+        Random random = new Random();
+
+        for (int i = 0; i < 3; i++) {
+            rowSymbols[i] = symbols[random.nextInt(symbols.length)];
+        }
+        return rowSymbols;
+
+    }
+    static void printRow(String[] row){
+        System.out.println("*************");
+        System.out.println(row[0] +" | "+ row[1] +" | "+ row[2]);
+        System.out.println("*************");
+    }
+    static int getPaid(String[] row, int bet){
+        if (row[0].equals(row[1]) && row[1].equals(row[2])) {
+            switch (row[0]) {
+                case "🍉" -> bet *= 3;
+                case "🍒" -> bet *= 5;
+                case "🍋" -> bet *= 8;
+                case "🔔" -> bet *= 10;
+                case "⭐" -> bet *= 20;
+                }
+            }
+        else if(row[0].equals(row[1]) || row[1].equals(row[2])){
+            switch (row[1]) {
+                case "🍉" -> bet *=1;
+                case "🍒" -> bet *= 2;
+                case "🍋" -> bet *= 3;
+                case "🔔" -> bet *= 5;
+                case "⭐" -> bet *= 8;
+                }
+            }
+            else bet = 0;
+        return bet;
+    }
+}
